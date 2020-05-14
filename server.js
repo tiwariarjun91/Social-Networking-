@@ -1,12 +1,17 @@
-const express = require('express'); //this is to run server and require method is used to load module    
+const express = require('express');  
 const connectDB = require('./config/db');
-const app = express(); // creating an app called app
+const app = express(); 
 
 
-//connect database, created config/db for database settings
+
 
 connectDB();
-app.get('/', (req , res) => res.send('API Running')) //express routing
+
+
+app.use(express.json({extended : false}));
+
+app.get('/', (req , res) => res.send('API Running')); 
+
 
 
 // Define routes 

@@ -8,3 +8,4 @@ router.get('/', (req, res) => res.send('auth routes'));
 
 
 module.exports = router;
+
