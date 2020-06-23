@@ -65,7 +65,8 @@ try {
     await user.save();
 
     // Return json web token
-
+     //res.send("User Registered");
+     //next();
 
     const payload = {
         user : {
