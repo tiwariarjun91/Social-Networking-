@@ -1,7 +1,0 @@
-{
-
-
-    "mongoURI": "mongodb+srv://Arjun123:Arjun123@devconnector-ziilp.mongodb.net/test?retryWrites=true&w=majority" ,
-   "jwtSecret": "my secret token"
-
-}
