@@ -6,6 +6,7 @@ const {check, validationResult} = require('express-validator/check');
 
 const Profile = require('../../models/Profile');
 const User = require('../../models/User');
+const { findOne } = require('../../models/Profile');
 
 
 // @route   GET /api/profile/me
@@ -73,8 +74,54 @@ async (req, res) => {
         profileFields.skills = skills.split(',').map(skill => skill.trim());
       }  
       
-      console.log(profileFields.skills);
-      res.send("HEllo");
+      //Build Social Object
+      profileFields.social = {};
+      if(facebook) profileFields.social.facebook = facebook ;
+      if(youtube) profileFields.social.youtube = youtube ;
+      if(instagram) profileFields.social.instagram = instagram ;
+      if(twitter) profileFields.social.twitter = twitter ;
+      if(linkedin) profileFields.social.linkedin = linkedin ;
+
+
+
+       try{
+        let profile = await Profile.findOne({user : req.user.id});
+
+        if(profile){
+            //Update
+            profile = await Profile.findOneAndUpdate({ user : req.user.id}, { $set : profileFields}, {new : true, upsert : true});
+
+            // return res.json(profile);
+            res.send("profile updated") 
+
+        }
+
+            //Create
+            profile = new Profile(profileFields);
+            
+            await profile.save();
+
+           // res.json(profile);
+           res.send("profile created");
+
+
+            // you got error because you used findbyidandupdate instead of findoneand update function 
+
+           /*try {
+            // Using upsert option (creates new doc if no match is found):
+            let profile = await Profile.findOneAndUpdate(
+              { user: req.user.id },
+              { $set: profileFields },
+              { new: true, upsert: true }
+            );
+            res.json(profile);*/
+
+      } catch(err){
+        console.error(err.message);
+        res.status(500).send('Server Error');
+      }
+      //console.log(profileFields.skills);
+      //res.send("HEllo");
 
 
 } 
