@@ -43,8 +43,8 @@ try {
 
     const avatar = gravatar.url(email , {
         s : '200',
-        r: pg ,
-        d: mm ,//it showd a server error on postman and on terminal showed pg, mm not defined but as i comment and remove comment it worked fine
+        r: 'pg' ,
+        d: 'mm' ,//it showd a server error on postman and on terminal showed pg, mm not defined but as i comment and remove comment it worked fine
 
     });
 
@@ -65,7 +65,7 @@ try {
     await user.save();
 
     // Return json web token
-     //res.send("User Registered");
+     //return res.send("User Registered");
      //next();
 
     const payload = {
