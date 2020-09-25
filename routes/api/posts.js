@@ -63,6 +63,33 @@ try {
         }
 
     });
+
+
+// @route   GET /api/posts/:id
+// @desc    Get post by id
+// @access  private
+
+router.get('/:id', auth, async (req,res) => {
+
+    try {
+        const postbyid = await Post.findById(req.params.id);//you did not get any post because u did not pass any id in the findbyid function
+
+        if(!postbyid){
+            return res.status(404).json({msg: 'post not found'})
+        }
+
+
+        res.json(postbyid);
+    
+    } catch (err) {
+        console.error(err.message);
+        if(err.kind === 'ObjectId'){
+            return res.status(404).json({msg: 'post not found'})
+        }
+                res.status(500).send('Server Error');
+            }
+    
+        });
   
   
 
