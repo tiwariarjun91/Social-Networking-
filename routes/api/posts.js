@@ -4,6 +4,7 @@ const router = express.Router();
 const auth = require('../../middleware/auth');
 const Post = require('../../models/Post');
 const Profile = require('../../models/Profile');
+const { remove } = require('../../models/User');
 const User = require('../../models/User');
 
 
@@ -91,6 +92,34 @@ router.get('/:id', auth, async (req,res) => {
     
         });
   
+// @route   DELETE /api/posts/:id
+// @desc    Delete a post by id
+// @access  private
+
+router.delete('/:id', auth, async (req,res) => {
+
+    try {
+         const deletepostbyid = await Post.findById(req.params.id);
+
+        if(deletepostbyid.user.toString() != req.user.id){
+           return  res.status(401).json({msg: 'not authorised'});
+
+        }
+
+        await deletepostbyid.remove();
+        res.json({msg : 'post removed'});
+        
+    
+    
+        
+    } catch (err) {
+        console.error(err.message);
+                res.status(500).send('Server Error');
+            }
+    
+        });
+    
+    
   
 
 
