@@ -119,73 +119,7 @@ router.delete('/:id', auth, async (req,res) => {
     
         });
     
-
-// @route   PUT /api/likes/:id
-// @desc    like a post
-// @access  private
-
-router.put('/likes/:id', auth, async (req,res) => {
-
-    const postlike = await Post.findById(req.params.id);
-
-    // to check if the post is already liked by the user
-    if(postlike.likes.filter(like => like.user.toString() == req.user.id).length > 0) {
-        return res.json(400).json({msg : 'Message already liked'});
-
-    };
-
-    postlike.likes.unshift({user : req.user.id});
-
-    await postlike.save();
-
-    res.json(postlike.likes);
-
-
-
-});
-
-// @route   Post /api/comment/:postid
-// @desc    add a comment on the post
-// @access  private
     
-router.post('/comment/:id', [auth, [check('text', 'text is required').not().isEmpty()]], 
-async (req,res) => {
-    try {
-
-        const error = validationResult(req);
-        if(!error.isEmpty){
-
-            return res.status(400).json({error : error.array()});
-        }
-
-    const user = await User.findById(req.user.id).select('-password');
-    const postcomment = await Post.findById(req.params.id);
-    
-    const comment = {
-
-        text: req.body.text,
-        name: user.name,
-        avatar: user.avatar,
-        user: req.user.id
-    };
-
-    postcomment.comments.unshift(comment);
-
-    await postcomment.save();
-
-    res.json(postcomment.comments);
-        
-    } catch (err) {
-        console.error(err.message);
-        res.status(500).send('Server error');
-        
-    }
-
-
-
-
-
-}) ;   
   
 
 
